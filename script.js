@@ -1,6 +1,6 @@
-// 1. CONFIGURACIÓN (ESPACIO ELIMINADO)
+// CONFIGURACIÓN DE FIREBASE (SIN ESPACIOS)
 const firebaseConfig = {
-    apiKey: "AIzaSyByut8gy78zjcC0r0DDxwyiwdKU7B8HGoQ",
+    apiKey: "AIzaSyByut8gy78zjcC0r0DDxwyiwdKU7B8HGoQ", 
     authDomain: "gesstion-inventario.firebaseapp.com",
     projectId: "gesstion-inventario",
     storageBucket: "gesstion-inventario.firebasestorage.app",
@@ -9,22 +9,22 @@ const firebaseConfig = {
     measurementId: "G-RVSMKP85LF"
 };
 
-// 2. INICIALIZACIÓN
+// INICIALIZACIÓN
 if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-// 3. FUNCIONES DE ACCESO
+// FUNCIONES
 function registrar() {
     const email = document.getElementById('email').value;
     const pass = document.getElementById('password').value;
-    if (!email || !pass) return alert("Llena los campos");
+    if(!email || !pass) return alert("Por favor escribe correo y clave");
 
     auth.createUserWithEmailAndPassword(email, pass)
-        .then(() => alert("¡Cuenta creada! Haz clic en Entrar."))
-        .catch(error => alert("Error: " + error.message));
+        .then(() => alert("¡Usuario registrado! Ahora dale a Entrar."))
+        .catch(error => alert("Error de Firebase: " + error.message));
 }
 
 function login() {
@@ -37,19 +37,12 @@ function login() {
             document.getElementById('inventory-section').style.display = 'block';
             cargarProductos();
         })
-        .catch(error => alert("Error al entrar: " + error.message));
+        .catch(error => alert("Clave o correo incorrectos"));
 }
 
-function logout() {
-    auth.signOut().then(() => location.reload());
-}
-
-// 4. FUNCIONES DE INVENTARIO
 function guardarProducto() {
     const nombre = document.getElementById('prod-nombre').value;
     const cantidad = document.getElementById('prod-cantidad').value;
-
-    if (!nombre || !cantidad) return alert("Faltan datos");
 
     db.collection("inventarios").add({
         usuario: auth.currentUser.uid,
@@ -63,28 +56,12 @@ function guardarProducto() {
 
 function cargarProductos() {
     const lista = document.getElementById('lista-productos');
-    db.collection("inventarios")
-        .where("usuario", "==", auth.currentUser.uid)
+    db.collection("inventarios").where("usuario", "==", auth.currentUser.uid)
         .onSnapshot((snapshot) => {
             lista.innerHTML = "";
             snapshot.forEach((doc) => {
                 const p = doc.data();
-                lista.innerHTML += `
-                    <tr>
-                        <td><strong>${p.nombre}</strong></td>
-                        <td>${p.cantidad} unidades</td>
-                        <td>
-                            <button onclick="eliminar('${doc.id}')" style="background:#e74c3c; color:white; border:none; padding:5px; border-radius:4px; cursor:pointer;">
-                                Borrar
-                            </button>
-                        </td>
-                    </tr>`;
+                lista.innerHTML += `<tr><td>${p.nombre}</td><td>${p.cantidad}</td></tr>`;
             });
         });
-}
-
-function eliminar(id) {
-    if (confirm("¿Borrar producto?")) {
-        db.collection("inventarios").doc(id).delete();
-    }
 }
