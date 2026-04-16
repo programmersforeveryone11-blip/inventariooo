@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sophi | Gestión de Inventario</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+
+    <div id="auth-section" class="container">
+        <div class="login-card">
+            <i class="fas fa-boxes fa-3x"></i>
+            <h1>Sistema de Inventario</h1>
+            <p>Inicia sesión para gestionar tu stock</p>
+            <input type="email" id="email" placeholder="Correo corporativo">
+            <input type="password" id="password" placeholder="Contraseña">
+            <div class="btns-group">
+                <button onclick="login()" class="btn-primary">Entrar</button>
+                <button onclick="registrar()" class="btn-secondary">Registrarse</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="inventory-section" class="main-dashboard" style="display:none;">
+        <nav class="navbar">
+            <div class="logo"><i class="fas fa-warehouse"></i> Mi Empresa</div>
+            <button onclick="logout()" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Salir</button>
+        </nav>
+
+        <main class="content">
+            <header class="header-actions">
+                <h2>Inventario de Productos</h2>
+                <div class="form-producto">
+                    <input type="text" id="prod-nombre" placeholder="Nombre del producto">
+                    <input type="number" id="prod-cantidad" placeholder="Cant.">
+                    <button onclick="guardarProducto()" class="btn-add"><i class="fas fa-plus"></i></button>
+                </div>
+            </header>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-tag"></i> Producto</th>
+                            <th><i class="fas fa-sort-numeric-up"></i> Stock</th>
+                            <th><i class="fas fa-tools"></i> Gestión</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lista-productos">
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
